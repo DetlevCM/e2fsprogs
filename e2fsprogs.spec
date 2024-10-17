@@ -226,8 +226,6 @@ exit 0
 %{_libdir}/libuuid.a
 %{_libdir}/libuuid.so
 
-## nope
-%{_root_libexec}/e2fsprogs/
 %{_root_libexec}/e2fsprogs/e2scrub_fail
 
 #%{_libdir}/pkgconfig/blkid.pc
@@ -269,4 +267,11 @@ exit 0
 %{_mandir}/man8/uuidd.8*
 %attr(6755, uuidd, uuidd) %{_sbindir}/uuidd
 %dir %attr(2775, uuidd, uuidd) /var/lib/libuuid
+
+
+## no idea what to do with these...
+%exclude /usr/libexec/e2fsprogs/e2scrub_all_cron
+%exclude /etc/cron.d/e2scrub_all
+%exclude /usr/lib/udev/rules.d/64-ext4.rules
+%exclude /usr/lib/udev/rules.d/96-e2scrub.rules
 

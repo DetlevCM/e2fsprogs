@@ -2,6 +2,8 @@
 %define	_root_libdir	/%{_lib}
 %define	_root_localedir	/usr/share/locale
 %define	_root_etcdir	/etc
+## because we have some files there...
+%define _root_libexec   /usr/libexec
 
 Summary: Utilities for managing ext2/ext3/ext4 filesystems
 Name: e2fsprogs
@@ -110,7 +112,7 @@ exit 0
 %doc README RELEASE-NOTES
 
 %{_root_sbindir}/badblocks
-%{_root_sbindir}/blkid
+#%{_root_sbindir}/blkid
 %{_root_sbindir}/debugfs
 %{_root_sbindir}/dumpe2fs
 %{_root_sbindir}/e2fsck
@@ -118,26 +120,39 @@ exit 0
 %{_root_sbindir}/e2label
 %{_root_sbindir}/e2mmpstatus
 %{_root_sbindir}/e2undo
-%{_root_sbindir}/findfs
+#%{_root_sbindir}/findfs
 %{_root_sbindir}/fsck
 %{_root_sbindir}/fsck.ext2
 %{_root_sbindir}/fsck.ext3
 %{_root_sbindir}/fsck.ext4
-%{_root_sbindir}/fsck.ext4dev
+#%{_root_sbindir}/fsck.ext4dev
 %{_root_sbindir}/logsave
 %{_root_sbindir}/mke2fs
 %{_root_etcdir}/mke2fs.conf
 %{_root_sbindir}/mkfs.ext2
 %{_root_sbindir}/mkfs.ext3
 %{_root_sbindir}/mkfs.ext4
-%{_root_sbindir}/mkfs.ext4dev
+#%{_root_sbindir}/mkfs.ext4dev
 %{_root_sbindir}/resize2fs
 %{_root_sbindir}/tune2fs
 %{_sbindir}/filefrag
 %{_sbindir}/mklost+found
 %{_sbindir}/e2freefrag
+%{_sbindir}/e4defrag
+%{_sbindir}/e4crypt
 
-%{_root_libdir}/libblkid.so.*
+%config /etc/e2scrub.conf
+### Why are those missing?
+%{_root_sbindir}/e2scrub
+%{_root_sbindir}/e2scrub_all
+
+%{_unitdir}/e2scrub@.service
+%{_unitdir}/e2scrub_all.service
+%{_unitdir}/e2scrub_all.timer
+%{_unitdir}/e2scrub_fail@.service
+%{_unitdir}/e2scrub_reap.service
+
+#%{_root_libdir}/libblkid.so.*
 %{_root_libdir}/libcom_err.so.*
 %{_root_libdir}/libe2p.so.*
 %{_root_libdir}/libext2fs.so.*
@@ -157,15 +172,15 @@ exit 0
 %{_mandir}/man5/mke2fs.conf.5*
 
 %{_mandir}/man8/badblocks.8*
-%{_mandir}/man8/blkid.8*
+#%{_mandir}/man8/blkid.8*
 %{_mandir}/man8/debugfs.8*
 %{_mandir}/man8/dumpe2fs.8*
 %{_mandir}/man8/e2fsck.8*
-%{_mandir}/man8/findfs.8*
+#%{_mandir}/man8/findfs.8*
 %{_mandir}/man8/fsck.ext2.8*
 %{_mandir}/man8/fsck.ext3.8*
 %{_mandir}/man8/fsck.ext4.8*
-%{_mandir}/man8/fsck.ext4dev.8*
+#%{_mandir}/man8/fsck.ext4dev.8*
 %{_mandir}/man8/e2image.8*
 %{_mandir}/man8/e2label.8*
 %{_mandir}/man8/e2mmpstatus.8*
@@ -176,12 +191,21 @@ exit 0
 %{_mandir}/man8/mkfs.ext2.8*
 %{_mandir}/man8/mkfs.ext3.8*
 %{_mandir}/man8/mkfs.ext4.8*
-%{_mandir}/man8/mkfs.ext4dev.8*
+#%{_mandir}/man8/mkfs.ext4dev.8*
 %{_mandir}/man8/mklost+found.8*
 %{_mandir}/man8/resize2fs.8*
 %{_mandir}/man8/tune2fs.8*
 %{_mandir}/man8/filefrag.8*
 %{_mandir}/man8/e2freefrag.8*
+## no idea where these are from, but rpmbuild complains
+%{_mandir}/man5/ext2.5.gz
+%{_mandir}/man5/ext3.5.gz
+%{_mandir}/man5/ext4.5.gz
+%{_mandir}/man8/e2scrub.8.gz
+%{_mandir}/man8/e2scrub_all.8.gz
+%{_mandir}/man8/e4crypt.8.gz
+%{_mandir}/man8/e4defrag.8.gz
+
 
 %files devel
 %defattr(-,root,root)
@@ -189,8 +213,8 @@ exit 0
 %{_bindir}/compile_et
 %{_bindir}/mk_cmds
 
-%{_libdir}/libblkid.a
-%{_libdir}/libblkid.so
+#%{_libdir}/libblkid.a
+#%{_libdir}/libblkid.so
 %{_libdir}/libcom_err.a
 %{_libdir}/libcom_err.so
 %{_libdir}/libe2p.a
@@ -202,7 +226,11 @@ exit 0
 %{_libdir}/libuuid.a
 %{_libdir}/libuuid.so
 
-%{_libdir}/pkgconfig/blkid.pc
+## nope
+%{_root_libexec}/e2fsprogs/
+%{_root_libexec}/e2fsprogs/e2scrub_fail
+
+#%{_libdir}/pkgconfig/blkid.pc
 %{_libdir}/pkgconfig/com_err.pc
 %{_libdir}/pkgconfig/e2p.pc
 %{_libdir}/pkgconfig/ext2fs.pc
@@ -211,7 +239,7 @@ exit 0
 
 %{_datadir}/et
 %{_datadir}/ss
-%{_includedir}/blkid
+#%{_includedir}/blkid
 %{_includedir}/e2p
 %{_includedir}/et
 %{_includedir}/com_err.h
@@ -221,7 +249,7 @@ exit 0
 %{_mandir}/man1/compile_et.1*
 %{_mandir}/man1/mk_cmds.1*
 %{_mandir}/man3/com_err.3*
-%{_mandir}/man3/libblkid.3*
+#%{_mandir}/man3/libblkid.3*
 %{_mandir}/man3/uuid.3*
 %{_mandir}/man3/uuid_clear.3*
 %{_mandir}/man3/uuid_compare.3*

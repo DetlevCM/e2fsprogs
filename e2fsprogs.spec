@@ -126,7 +126,6 @@ exit 0
 %exclude %{_root_sbindir}/fsck
 
 %{_root_sbindir}/badblocks
-#%{_root_sbindir}/blkid
 %{_root_sbindir}/debugfs
 %{_root_sbindir}/dumpe2fs
 %{_root_sbindir}/e2fsck
@@ -134,18 +133,15 @@ exit 0
 %{_root_sbindir}/e2label
 %{_root_sbindir}/e2mmpstatus
 %{_root_sbindir}/e2undo
-#%{_root_sbindir}/findfs
 %{_root_sbindir}/fsck.ext2
 %{_root_sbindir}/fsck.ext3
 %{_root_sbindir}/fsck.ext4
-#%{_root_sbindir}/fsck.ext4dev
 %{_root_sbindir}/logsave
 %{_root_sbindir}/mke2fs
 %{_root_etcdir}/mke2fs.conf
 %{_root_sbindir}/mkfs.ext2
 %{_root_sbindir}/mkfs.ext3
 %{_root_sbindir}/mkfs.ext4
-#%{_root_sbindir}/mkfs.ext4dev
 %{_root_sbindir}/resize2fs
 %{_root_sbindir}/tune2fs
 %{_root_sbindir}/filefrag
@@ -167,7 +163,6 @@ exit 0
 %exclude /usr/lib/systemd/system/e2scrub_fail@.service
 %exclude /usr/lib/systemd/system/e2scrub_reap.service
 
-#%{_root_libdir}/libblkid.so.*
 %exclude %{_root_libdir}/libcom_err.so.*
 %exclude %{_root_libdir}/libe2p.so.*
 %exclude %{_root_libdir}/libext2fs.so.*
@@ -191,15 +186,12 @@ exit 0
 %{_mandir}/man5/mke2fs.conf.5*
 
 %{_mandir}/man8/badblocks.8*
-#%{_mandir}/man8/blkid.8*
 %{_mandir}/man8/debugfs.8*
 %{_mandir}/man8/dumpe2fs.8*
 %{_mandir}/man8/e2fsck.8*
-#%{_mandir}/man8/findfs.8*
 %{_mandir}/man8/fsck.ext2.8*
 %{_mandir}/man8/fsck.ext3.8*
 %{_mandir}/man8/fsck.ext4.8*
-#%{_mandir}/man8/fsck.ext4dev.8*
 %{_mandir}/man8/e2image.8*
 %{_mandir}/man8/e2label.8*
 %{_mandir}/man8/e2mmpstatus.8*
@@ -212,7 +204,6 @@ exit 0
 %{_mandir}/man8/mkfs.ext2.8*
 %{_mandir}/man8/mkfs.ext3.8*
 %{_mandir}/man8/mkfs.ext4.8*
-#%{_mandir}/man8/mkfs.ext4dev.8*
 %{_mandir}/man8/mklost+found.8*
 %{_mandir}/man8/resize2fs.8*
 %{_mandir}/man8/tune2fs.8*
@@ -234,8 +225,6 @@ exit 0
 %exclude /usr/bin/compile_et
 %exclude /usr/bin/mk_cmds
 
-#%{_libdir}/libblkid.a
-#%{_libdir}/libblkid.so
 %{_libdir}/libcom_err.a
 %{_libdir}/libcom_err.so
 %{_libdir}/libss.a
@@ -245,7 +234,6 @@ exit 0
 
 %{_root_libexec}/e2fsprogs/e2scrub_fail
 
-#%{_libdir}/pkgconfig/blkid.pc
 %{_libdir}/pkgconfig/com_err.pc
 %{_libdir}/pkgconfig/e2p.pc
 %{_libdir}/pkgconfig/ext2fs.pc
@@ -254,7 +242,6 @@ exit 0
 
 %{_datadir}/et
 %{_datadir}/ss
-#%{_includedir}/blkid
 %{_includedir}/e2p
 %exclude %{_includedir}/et
 %exclude /usr/include/com_err.h
@@ -264,7 +251,6 @@ exit 0
 %{_mandir}/man1/compile_et.1*
 %{_mandir}/man1/mk_cmds.1*
 %{_mandir}/man3/com_err.3*
-#%{_mandir}/man3/libblkid.3*
 %{_mandir}/man3/uuid.3*
 %{_mandir}/man3/uuid_clear.3*
 %{_mandir}/man3/uuid_compare.3*

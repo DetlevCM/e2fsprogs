@@ -200,13 +200,7 @@ exit 0
 %{_infodir}/libext2fs.info*
 
 ## I want two more libraries in Rocky devel:
-# libe2p.so -> libe2p.so.2
-# libext2fs.so -> libext2fs.so.2
-## and I'm not too sure how the .a and .so work here... 
-## looks like I want links too, not actual files...
-%{_libdir}/libe2p.a
 %{_libdir}/libe2p.so
-%{_libdir}/libext2fs.a
 %{_libdir}/libext2fs.so
 
 %{_libdir}/pkgconfig/e2p.pc
@@ -219,14 +213,13 @@ exit 0
 
 ##
 ## Rocky 9.5 has e2fsprog-libs, openSUSE libext2fs
-##
 
 %files libs
-%{_root_libdir}/libe2p.a
-%{_root_libdir}/libe2p.so
-%{_root_libdir}/libext2fs.a
-%{_root_libdir}/libext2fs.so
-
+%{_root_libdir}/libe2p.so.2
+%{_libdir}/libe2p.so.*
+%{_root_libdir}/libext2fs.so.2
+%{_libdir}/libext2fs.so.*
+## provides more libs than Rocky by defeault, but good enough for now...
 
 %files -n uuidd
 %defattr(-,root,root)
@@ -273,8 +266,6 @@ exit 0
 %exclude /usr/lib/systemd/system/e2scrub_reap.service
 
 %exclude %{_root_libdir}/libcom_err.so.*
-%exclude %{_root_libdir}/libe2p.so.*
-%exclude %{_root_libdir}/libext2fs.so.*
 %exclude %{_root_libdir}/libss.so.*
 %exclude %{_root_libdir}/libuuid.so.*
 
@@ -312,4 +303,6 @@ exit 0
 %exclude %{_libdir}/libuuid.a
 %exclude %{_libdir}/libuuid.so
 
+%exclude %{_libdir}/libe2p.a
+%exclude %{_libdir}/libext2fs.a
 

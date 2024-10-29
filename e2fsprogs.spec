@@ -1,9 +1,10 @@
-%define	_root_sbindir	/usr/sbin
-%define	_root_libdir	/usr/lib64
-%define	_root_localedir	/usr/share/locale
-%define	_root_etcdir	/etc
+%define	_root_sbindir	 /usr/sbin
+%define	_root_libdir	 /usr/lib64
+%define	_root_localedir	 /usr/share/locale
+%define	_root_etcdir	 /etc
+%define _root_systemddir /usr/lib/systemd
 ## because we have some files there...
-%define _root_libexec   /usr/libexec
+%define _root_libexec    /usr/libexec
 
 Summary: Utilities for managing ext2/ext3/ext4 filesystems
 Name: e2fsprogs
@@ -49,15 +50,51 @@ ext2. ext3. or ext4 filesystem-specific programs.  If you install
 e2fsprogs-devel, you'll also want to install e2fsprogs.
 
 %package libs
-Summary: static libraries
+Summary: libraries
 Group: Libraries
 Requires: e2fsprogs = %{version}
 Prereq: /sbin/install-info
 
 %description libs
-Ext2 filesystem-specific static libraries
+Ext2 filesystem-specific libraries
 On Rocky this package is called e2fsprogs-lib, on openSUSE it is called libext2fs.
 Not sure how to get the .2 and .2.3 / .2.4 endings...
+
+%package scrub
+Summary: scrubs
+Group: Libraries
+Requires: e2fsprogs = %{version}
+Prereq: /sbin/install-info
+
+%description scrub
+Contains e2fsprogs scrubs libraries/tools
+
+%package -n libcom_err
+Summary: libcom_err
+Group: Libraries
+Requires: e2fsprogs = %{version}
+Prereq: /sbin/install-info
+
+%description -n libcom_err
+Contains e2fsprogs libcom_err
+
+%package -n libcom_err-devel
+Summary: libcom_err-devel
+Group: Libraries
+Requires: e2fsprogs = %{version}
+Prereq: /sbin/install-info
+
+%description -n libcom_err-devel
+Contains e2fsprogs libcom_err-devel
+
+%package -n libcom_err-devel-static
+Summary: libcom_err-devel-static
+Group: Libraries
+Requires: e2fsprogs = %{version}
+Prereq: /sbin/install-info
+
+%description -n libcom_err-devel-static
+Contains e2fsprogs libcom_err-devel-static
 
 %package -n uuidd
 Summary: helper daemon to guarantee uniqueness of time-based UUIDs
@@ -154,14 +191,11 @@ exit 0
 
 %{_bindir}/chattr
 %{_bindir}/lsattr
+
 %{_mandir}/man1/chattr.1*
 %{_mandir}/man1/lsattr.1*
-
-
 %{_mandir}/man5/e2fsck.conf.5*
 %{_mandir}/man5/mke2fs.conf.5*
-
-
 %{_mandir}/man8/badblocks.8*
 %{_mandir}/man8/debugfs.8*
 %{_mandir}/man8/dumpe2fs.8*
@@ -199,10 +233,8 @@ exit 0
 %defattr(-,root,root)
 %{_infodir}/libext2fs.info*
 
-## I want two more libraries in Rocky devel:
 %{_libdir}/libe2p.so
 %{_libdir}/libext2fs.so
-
 %{_libdir}/pkgconfig/e2p.pc
 %{_libdir}/pkgconfig/ext2fs.pc
 
@@ -221,6 +253,66 @@ exit 0
 %{_libdir}/libext2fs.so.*
 ## provides more libs than Rocky by defeault, but good enough for now...
 
+##
+## a seperate rpm under openSUSE
+%files scrub
+
+%{_root_etcdir}/e2scrub.conf
+
+%{_root_sbindir}/e2scrub
+%{_root_sbindir}/e2scrub_all
+
+## openSUSE path is /usr/lib64/e2fsprogs/e2scrub_fail 
+#%{_root_libdir}/e2fsprogs/e2scrub_fail
+%{_root_libdir}/../libexec/e2fsprogs/e2scrub_fail
+
+%{_root_systemddir}/system/e2scrub@.service
+%{_root_systemddir}/system/e2scrub_all.service
+%{_root_systemddir}/system/e2scrub_all.timer
+%{_root_systemddir}/system/e2scrub_fail@.service
+%{_root_systemddir}/system/e2scrub_reap.service
+
+
+##
+## a seperate rpm under openSUSE
+%files -n libcom_err
+
+%{_root_libdir}/libcom_err.so.*
+%{_root_libdir}/libss.so.*
+
+##
+## a seperate rpm under openSUSE
+%files -n libcom_err-devel
+
+%{_bindir}/compile_et
+%{_bindir}/mk_cmds
+
+%{_includedir}/et
+%{_includedir}/ss
+%{_includedir}/com_err.h
+
+%{_libdir}/pkgconfig/com_err.pc
+%{_libdir}/pkgconfig/ss.pc
+
+%{_root_libdir}/libcom_err.so
+%{_libdir}/libss.so
+
+%{_mandir}/man1/compile_et.1*
+%{_mandir}/man1/mk_cmds.1*
+%{_mandir}/man3/com_err.3*
+%{_datadir}/ss
+%{_datadir}/et
+
+##
+## a seperate rpm under openSUSE
+%files -n libcom_err-devel-static
+
+%{_root_libdir}/libcom_err.a
+%{_root_libdir}/libss.a
+
+
+
+## this does not follow the Rocky struture... 
 %files -n uuidd
 %defattr(-,root,root)
 # if you want to run via init
@@ -243,6 +335,10 @@ exit 0
 %{_mandir}/man3/uuid_unparse.3*
 
 
+
+
+
+
 ##
 ## Long list of excluded files that aren't distributed with 
 ## openSUSE or Rocky, but built/installed and thus rpm complains
@@ -255,51 +351,16 @@ exit 0
 %exclude /usr/bin/uuidgen
 %exclude %{_mandir}/man1/uuidgen.1.gz
 
-%exclude /etc/e2scrub.conf
-%exclude %{_root_sbindir}/e2scrub
-%exclude %{_root_sbindir}/e2scrub_all
-
-%exclude /usr/lib/systemd/system/e2scrub@.service
-%exclude /usr/lib/systemd/system/e2scrub_all.service
-%exclude /usr/lib/systemd/system/e2scrub_all.timer
-%exclude /usr/lib/systemd/system/e2scrub_fail@.service
-%exclude /usr/lib/systemd/system/e2scrub_reap.service
-
-%exclude %{_root_libdir}/libcom_err.so.*
-%exclude %{_root_libdir}/libss.so.*
 %exclude %{_root_libdir}/libuuid.so.*
-
 %exclude %{_mandir}/man8/fsck.8.gz
-
-%exclude /usr/bin/compile_et
-%exclude /usr/bin/mk_cmds
-
-%exclude %{_includedir}/et
-%exclude /usr/include/com_err.h
 
 %exclude /usr/libexec/e2fsprogs/e2scrub_all_cron
 %exclude /etc/cron.d/e2scrub_all
 %exclude /usr/lib/udev/rules.d/64-ext4.rules
 %exclude /usr/lib/udev/rules.d/96-e2scrub.rules
 
-%exclude %{_mandir}/man1/compile_et.1*
-%exclude %{_mandir}/man1/mk_cmds.1*
-
-%exclude %{_datadir}/ss
-%exclude %{_includedir}/ss
-
-%exclude %{_datadir}/et
-%exclude %{_libdir}/pkgconfig/ss.pc
 %exclude %{_libdir}/pkgconfig/uuid.pc
-%exclude %{_libdir}/pkgconfig/com_err.pc
-
-%exclude %{_root_libexec}/e2fsprogs/e2scrub_fail
 %exclude %{_includedir}/uuid
-
-%exclude %{_libdir}/libcom_err.a
-%exclude %{_libdir}/libcom_err.so
-%exclude %{_libdir}/libss.a
-%exclude %{_libdir}/libss.so
 %exclude %{_libdir}/libuuid.a
 %exclude %{_libdir}/libuuid.so
 

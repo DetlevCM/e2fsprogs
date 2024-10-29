@@ -1,5 +1,5 @@
 %define	_root_sbindir	/usr/sbin
-%define	_root_libdir	/%{_lib}
+%define	_root_libdir	/usr/lib64
 %define	_root_localedir	/usr/share/locale
 %define	_root_etcdir	/etc
 ## because we have some files there...
@@ -48,6 +48,17 @@ You should install e2fsprogs-devel if you want to develop
 ext2. ext3. or ext4 filesystem-specific programs.  If you install
 e2fsprogs-devel, you'll also want to install e2fsprogs.
 
+%package libs
+Summary: static libraries
+Group: Libraries
+Requires: e2fsprogs = %{version}
+Prereq: /sbin/install-info
+
+%description libs
+Ext2 filesystem-specific static libraries
+On Rocky this package is called e2fsprogs-lib, on openSUSE it is called libext2fs.
+Not sure how to get the .2 and .2.3 / .2.4 endings...
+
 %package -n uuidd
 Summary: helper daemon to guarantee uniqueness of time-based UUIDs
 Group: System Environment/Daemons
@@ -67,7 +78,7 @@ SMP systems.
 %configure --enable-elf-shlibs --enable-nls \
 	%{?extra_config_flags:%extra_config_flags}
 make
-#make check
+make check
 
 %install
 rm -rf $RPM_BUILD_ROOT
@@ -146,8 +157,8 @@ exit 0
 ## not part of rpm on opneSUSE Tumbleweed & Rocky 9.5
 %exclude /etc/e2scrub.conf
 ### Why are those missing?
-%{_root_sbindir}/e2scrub
-%{_root_sbindir}/e2scrub_all
+%exclude /usr/sbin/e2scrub
+%exclude /usr/sbin/e2scrub_all
 
 ## not part of rpm on opneSUSE Tumbleweed & Rocky 9.5
 %exclude /usr/lib/systemd/system/e2scrub@.service
@@ -157,11 +168,11 @@ exit 0
 %exclude /usr/lib/systemd/system/e2scrub_reap.service
 
 #%{_root_libdir}/libblkid.so.*
-%exclude /lib64/libcom_err.so.*
-%exclude /lib64/libe2p.so.*
-%exclude /lib64/libext2fs.so.*
-%exclude /lib64/libss.so.*
-%exclude /lib64/libuuid.so.*
+%exclude /usr/lib64/libcom_err.so.*
+%exclude /usr/lib64/libe2p.so.*
+%exclude /usr/lib64/libext2fs.so.*
+%exclude /usr/lib64/libss.so.*
+%exclude /usr/lib64/libuuid.so.*
 
 ## not part of rpm on opneSUSE Tumbleweed & Rocky 9.5
 %exclude /usr/lib64/e2initrd_helper
@@ -227,10 +238,6 @@ exit 0
 #%{_libdir}/libblkid.so
 %{_libdir}/libcom_err.a
 %{_libdir}/libcom_err.so
-%{_libdir}/libe2p.a
-%{_libdir}/libe2p.so
-%{_libdir}/libext2fs.a
-%{_libdir}/libext2fs.so
 %{_libdir}/libss.a
 %{_libdir}/libss.so
 %{_libdir}/libuuid.a
@@ -269,6 +276,13 @@ exit 0
 %{_mandir}/man3/uuid_parse.3*
 %{_mandir}/man3/uuid_time.3*
 %{_mandir}/man3/uuid_unparse.3*
+
+## Rocky 9.5 has e2fsprog-libs, openSUSE libext2fs
+%files libs
+%{_root_libdir}/libe2p.a
+%{_root_libdir}/libe2p.so
+%{_root_libdir}/libext2fs.a
+%{_root_libdir}/libext2fs.so
 
 %files -n uuidd
 %defattr(-,root,root)

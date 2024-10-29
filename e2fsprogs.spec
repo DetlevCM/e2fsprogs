@@ -118,12 +118,13 @@ useradd -r -g uuidd -d /var/lib/libuuid -s /sbin/nologin \
     -c "UUID generator helper daemon" uuidd
 exit 0
 
+##
+## first all the files in the core package:
+##
+
 %files -f %{name}.lang
 %defattr(-,root,root)
 %doc README RELEASE-NOTES
-
-## not part of rpm on opneSUSE Tumbleweed & Rocky 9.5
-%exclude %{_root_sbindir}/fsck
 
 %{_root_sbindir}/badblocks
 %{_root_sbindir}/debugfs
@@ -150,40 +151,16 @@ exit 0
 %{_root_sbindir}/e4defrag
 %{_root_sbindir}/e4crypt
 
-## not part of rpm on opneSUSE Tumbleweed & Rocky 9.5
-%exclude /etc/e2scrub.conf
-### Why are those missing?
-%exclude %{_root_sbindir}/e2scrub
-%exclude %{_root_sbindir}/e2scrub_all
-
-## not part of rpm on opneSUSE Tumbleweed & Rocky 9.5
-%exclude /usr/lib/systemd/system/e2scrub@.service
-%exclude /usr/lib/systemd/system/e2scrub_all.service
-%exclude /usr/lib/systemd/system/e2scrub_all.timer
-%exclude /usr/lib/systemd/system/e2scrub_fail@.service
-%exclude /usr/lib/systemd/system/e2scrub_reap.service
-
-%exclude %{_root_libdir}/libcom_err.so.*
-%exclude %{_root_libdir}/libe2p.so.*
-%exclude %{_root_libdir}/libext2fs.so.*
-%exclude %{_root_libdir}/libss.so.*
-%exclude %{_root_libdir}/libuuid.so.*
-
-## not part of rpm on opneSUSE Tumbleweed & Rocky 9.5
-%exclude /usr/lib64/e2initrd_helper
 
 %{_bindir}/chattr
 %{_bindir}/lsattr
-## not part of rpm on opneSUSE Tumbleweed & Rocky 9.5
-%exclude /usr/bin/uuidgen
 %{_mandir}/man1/chattr.1*
 %{_mandir}/man1/lsattr.1*
 
-## not part of rpm on opneSUSE Tumbleweed & Rocky 9.5
-%exclude %{_mandir}/man1/uuidgen.1.gz
 
 %{_mandir}/man5/e2fsck.conf.5*
 %{_mandir}/man5/mke2fs.conf.5*
+
 
 %{_mandir}/man8/badblocks.8*
 %{_mandir}/man8/debugfs.8*
@@ -196,9 +173,6 @@ exit 0
 %{_mandir}/man8/e2label.8*
 %{_mandir}/man8/e2mmpstatus.8*
 %{_mandir}/man8/e2undo.8*
-
-## not part of rpm on opneSUSE Tumbleweed & Rocky 9.5
-%exclude %{_mandir}/man8/fsck.8.gz
 %{_mandir}/man8/logsave.8*
 %{_mandir}/man8/mke2fs.8*
 %{_mandir}/man8/mkfs.ext2.8*
@@ -209,7 +183,6 @@ exit 0
 %{_mandir}/man8/tune2fs.8*
 %{_mandir}/man8/filefrag.8*
 %{_mandir}/man8/e2freefrag.8*
-## no idea where these are from, but rpmbuild complains
 %{_mandir}/man5/ext2.5.gz
 %{_mandir}/man5/ext3.5.gz
 %{_mandir}/man5/ext4.5.gz
@@ -218,12 +191,13 @@ exit 0
 %{_mandir}/man8/e4crypt.8.gz
 %{_mandir}/man8/e4defrag.8.gz
 
+##
 ## devel is empty on openSUSE, contains some headers on Rocky
+## 
+
 %files devel
 %defattr(-,root,root)
 %{_infodir}/libext2fs.info*
-%exclude /usr/bin/compile_et
-%exclude /usr/bin/mk_cmds
 
 %{_libdir}/libcom_err.a
 %{_libdir}/libcom_err.so
@@ -243,8 +217,6 @@ exit 0
 %{_datadir}/et
 %{_datadir}/ss
 %{_includedir}/e2p
-%exclude %{_includedir}/et
-%exclude /usr/include/com_err.h
 %{_includedir}/ext2fs
 %{_includedir}/ss
 %{_includedir}/uuid
@@ -263,12 +235,16 @@ exit 0
 %{_mandir}/man3/uuid_time.3*
 %{_mandir}/man3/uuid_unparse.3*
 
+##
 ## Rocky 9.5 has e2fsprog-libs, openSUSE libext2fs
+##
+
 %files libs
 %{_root_libdir}/libe2p.a
 %{_root_libdir}/libe2p.so
 %{_root_libdir}/libext2fs.a
 %{_root_libdir}/libext2fs.so
+
 
 %files -n uuidd
 %defattr(-,root,root)
@@ -279,7 +255,42 @@ exit 0
 %dir %attr(2775, uuidd, uuidd) /var/lib/libuuid
 
 
-## no idea what to do with these...
+
+##
+## Long list of exlcuded files that aren't distributed with 
+## openSUSE or Rocky, but built/installed and thus rpm complains
+##
+
+%exclude %{_root_sbindir}/fsck
+
+%exclude /usr/lib64/e2initrd_helper
+%exclude /usr/bin/uuidgen
+%exclude %{_mandir}/man1/uuidgen.1.gz
+
+%exclude /etc/e2scrub.conf
+%exclude %{_root_sbindir}/e2scrub
+%exclude %{_root_sbindir}/e2scrub_all
+
+%exclude /usr/lib/systemd/system/e2scrub@.service
+%exclude /usr/lib/systemd/system/e2scrub_all.service
+%exclude /usr/lib/systemd/system/e2scrub_all.timer
+%exclude /usr/lib/systemd/system/e2scrub_fail@.service
+%exclude /usr/lib/systemd/system/e2scrub_reap.service
+
+%exclude %{_root_libdir}/libcom_err.so.*
+%exclude %{_root_libdir}/libe2p.so.*
+%exclude %{_root_libdir}/libext2fs.so.*
+%exclude %{_root_libdir}/libss.so.*
+%exclude %{_root_libdir}/libuuid.so.*
+
+%exclude %{_mandir}/man8/fsck.8.gz
+
+%exclude /usr/bin/compile_et
+%exclude /usr/bin/mk_cmds
+
+%exclude %{_includedir}/et
+%exclude /usr/include/com_err.h
+
 %exclude /usr/libexec/e2fsprogs/e2scrub_all_cron
 %exclude /etc/cron.d/e2scrub_all
 %exclude /usr/lib/udev/rules.d/64-ext4.rules

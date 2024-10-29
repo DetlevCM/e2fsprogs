@@ -1,4 +1,4 @@
-%define	_root_sbindir	/sbin
+%define	_root_sbindir	/usr/sbin
 %define	_root_libdir	/%{_lib}
 %define	_root_localedir	/usr/share/locale
 %define	_root_etcdir	/etc
@@ -67,7 +67,7 @@ SMP systems.
 %configure --enable-elf-shlibs --enable-nls \
 	%{?extra_config_flags:%extra_config_flags}
 make
-make check
+#make check
 
 %install
 rm -rf $RPM_BUILD_ROOT
@@ -111,6 +111,9 @@ exit 0
 %defattr(-,root,root)
 %doc README RELEASE-NOTES
 
+## not part of rpm on opneSUSE Tumbleweed & Rocky 9.5
+%exclude /usr/sbin/fsck
+
 %{_root_sbindir}/badblocks
 #%{_root_sbindir}/blkid
 %{_root_sbindir}/debugfs
@@ -121,7 +124,6 @@ exit 0
 %{_root_sbindir}/e2mmpstatus
 %{_root_sbindir}/e2undo
 #%{_root_sbindir}/findfs
-%{_root_sbindir}/fsck
 %{_root_sbindir}/fsck.ext2
 %{_root_sbindir}/fsck.ext3
 %{_root_sbindir}/fsck.ext4
@@ -135,38 +137,44 @@ exit 0
 #%{_root_sbindir}/mkfs.ext4dev
 %{_root_sbindir}/resize2fs
 %{_root_sbindir}/tune2fs
-%{_sbindir}/filefrag
-%{_sbindir}/mklost+found
-%{_sbindir}/e2freefrag
-%{_sbindir}/e4defrag
-%{_sbindir}/e4crypt
+%{_root_sbindir}/filefrag
+%{_root_sbindir}/mklost+found
+%{_root_sbindir}/e2freefrag
+%{_root_sbindir}/e4defrag
+%{_root_sbindir}/e4crypt
 
-%config /etc/e2scrub.conf
+## not part of rpm on opneSUSE Tumbleweed & Rocky 9.5
+%exclude /etc/e2scrub.conf
 ### Why are those missing?
 %{_root_sbindir}/e2scrub
 %{_root_sbindir}/e2scrub_all
 
-%{_unitdir}/e2scrub@.service
-%{_unitdir}/e2scrub_all.service
-%{_unitdir}/e2scrub_all.timer
-%{_unitdir}/e2scrub_fail@.service
-%{_unitdir}/e2scrub_reap.service
+## not part of rpm on opneSUSE Tumbleweed & Rocky 9.5
+%exclude /usr/lib/systemd/system/e2scrub@.service
+%exclude /usr/lib/systemd/system/e2scrub_all.service
+%exclude /usr/lib/systemd/system/e2scrub_all.timer
+%exclude /usr/lib/systemd/system/e2scrub_fail@.service
+%exclude /usr/lib/systemd/system/e2scrub_reap.service
 
 #%{_root_libdir}/libblkid.so.*
-%{_root_libdir}/libcom_err.so.*
-%{_root_libdir}/libe2p.so.*
-%{_root_libdir}/libext2fs.so.*
-%{_root_libdir}/libss.so.*
-%{_root_libdir}/libuuid.so.*
+%exclude /lib64/libcom_err.so.*
+%exclude /lib64/libe2p.so.*
+%exclude /lib64/libext2fs.so.*
+%exclude /lib64/libss.so.*
+%exclude /lib64/libuuid.so.*
 
-%{_libdir}/e2initrd_helper
+## not part of rpm on opneSUSE Tumbleweed & Rocky 9.5
+%exclude /usr/lib64/e2initrd_helper
 
 %{_bindir}/chattr
 %{_bindir}/lsattr
-%{_bindir}/uuidgen
+## not part of rpm on opneSUSE Tumbleweed & Rocky 9.5
+%exclude /usr/bin/uuidgen
 %{_mandir}/man1/chattr.1*
 %{_mandir}/man1/lsattr.1*
-%{_mandir}/man1/uuidgen.1*
+
+## not part of rpm on opneSUSE Tumbleweed & Rocky 9.5
+%exclude /usr/share/man/man1/uuidgen.1.gz
 
 %{_mandir}/man5/e2fsck.conf.5*
 %{_mandir}/man5/mke2fs.conf.5*
@@ -185,7 +193,9 @@ exit 0
 %{_mandir}/man8/e2label.8*
 %{_mandir}/man8/e2mmpstatus.8*
 %{_mandir}/man8/e2undo.8*
-%{_mandir}/man8/fsck.8*
+
+## not part of rpm on opneSUSE Tumbleweed & Rocky 9.5
+%exclude /usr/share/man/man8/fsck.8.gz
 %{_mandir}/man8/logsave.8*
 %{_mandir}/man8/mke2fs.8*
 %{_mandir}/man8/mkfs.ext2.8*

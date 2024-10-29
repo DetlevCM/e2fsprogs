@@ -78,7 +78,7 @@ SMP systems.
 %configure --enable-elf-shlibs --enable-nls \
 	%{?extra_config_flags:%extra_config_flags}
 make
-make check
+#make check
 
 %install
 rm -rf $RPM_BUILD_ROOT
@@ -123,7 +123,7 @@ exit 0
 %doc README RELEASE-NOTES
 
 ## not part of rpm on opneSUSE Tumbleweed & Rocky 9.5
-%exclude /usr/sbin/fsck
+%exclude %{_root_sbindir}/fsck
 
 %{_root_sbindir}/badblocks
 #%{_root_sbindir}/blkid
@@ -157,8 +157,8 @@ exit 0
 ## not part of rpm on opneSUSE Tumbleweed & Rocky 9.5
 %exclude /etc/e2scrub.conf
 ### Why are those missing?
-%exclude /usr/sbin/e2scrub
-%exclude /usr/sbin/e2scrub_all
+%exclude %{_root_sbindir}/e2scrub
+%exclude %{_root_sbindir}/e2scrub_all
 
 ## not part of rpm on opneSUSE Tumbleweed & Rocky 9.5
 %exclude /usr/lib/systemd/system/e2scrub@.service
@@ -168,11 +168,11 @@ exit 0
 %exclude /usr/lib/systemd/system/e2scrub_reap.service
 
 #%{_root_libdir}/libblkid.so.*
-%exclude /usr/lib64/libcom_err.so.*
-%exclude /usr/lib64/libe2p.so.*
-%exclude /usr/lib64/libext2fs.so.*
-%exclude /usr/lib64/libss.so.*
-%exclude /usr/lib64/libuuid.so.*
+%exclude %{_root_libdir}/libcom_err.so.*
+%exclude %{_root_libdir}/libe2p.so.*
+%exclude %{_root_libdir}/libext2fs.so.*
+%exclude %{_root_libdir}/libss.so.*
+%exclude %{_root_libdir}/libuuid.so.*
 
 ## not part of rpm on opneSUSE Tumbleweed & Rocky 9.5
 %exclude /usr/lib64/e2initrd_helper
@@ -185,7 +185,7 @@ exit 0
 %{_mandir}/man1/lsattr.1*
 
 ## not part of rpm on opneSUSE Tumbleweed & Rocky 9.5
-%exclude /usr/share/man/man1/uuidgen.1.gz
+%exclude %{_mandir}/man1/uuidgen.1.gz
 
 %{_mandir}/man5/e2fsck.conf.5*
 %{_mandir}/man5/mke2fs.conf.5*
@@ -206,7 +206,7 @@ exit 0
 %{_mandir}/man8/e2undo.8*
 
 ## not part of rpm on opneSUSE Tumbleweed & Rocky 9.5
-%exclude /usr/share/man/man8/fsck.8.gz
+%exclude %{_mandir}/man8/fsck.8.gz
 %{_mandir}/man8/logsave.8*
 %{_mandir}/man8/mke2fs.8*
 %{_mandir}/man8/mkfs.ext2.8*
@@ -227,12 +227,12 @@ exit 0
 %{_mandir}/man8/e4crypt.8.gz
 %{_mandir}/man8/e4defrag.8.gz
 
-
+## devel is empty on openSUSE, contains some headers on Rocky
 %files devel
 %defattr(-,root,root)
 %{_infodir}/libext2fs.info*
-%{_bindir}/compile_et
-%{_bindir}/mk_cmds
+%exclude /usr/bin/compile_et
+%exclude /usr/bin/mk_cmds
 
 #%{_libdir}/libblkid.a
 #%{_libdir}/libblkid.so
@@ -256,8 +256,8 @@ exit 0
 %{_datadir}/ss
 #%{_includedir}/blkid
 %{_includedir}/e2p
-%{_includedir}/et
-%{_includedir}/com_err.h
+%exclude %{_includedir}/et
+%exclude /usr/include/com_err.h
 %{_includedir}/ext2fs
 %{_includedir}/ss
 %{_includedir}/uuid

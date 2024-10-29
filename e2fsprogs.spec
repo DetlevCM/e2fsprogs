@@ -78,7 +78,7 @@ SMP systems.
 %configure --enable-elf-shlibs --enable-nls \
 	%{?extra_config_flags:%extra_config_flags}
 make
-#make check
+make check
 
 %install
 rm -rf $RPM_BUILD_ROOT
@@ -199,41 +199,23 @@ exit 0
 %defattr(-,root,root)
 %{_infodir}/libext2fs.info*
 
-%{_libdir}/libcom_err.a
-%{_libdir}/libcom_err.so
-%{_libdir}/libss.a
-%{_libdir}/libss.so
-%{_libdir}/libuuid.a
-%{_libdir}/libuuid.so
+## I want two more libraries in Rocky devel:
+# libe2p.so -> libe2p.so.2
+# libext2fs.so -> libext2fs.so.2
+## and I'm not too sure how the .a and .so work here... 
+## looks like I want links too, not actual files...
+%{_libdir}/libe2p.a
+%{_libdir}/libe2p.so
+%{_libdir}/libext2fs.a
+%{_libdir}/libext2fs.so
 
-%{_root_libexec}/e2fsprogs/e2scrub_fail
-
-%{_libdir}/pkgconfig/com_err.pc
 %{_libdir}/pkgconfig/e2p.pc
 %{_libdir}/pkgconfig/ext2fs.pc
-%{_libdir}/pkgconfig/ss.pc
-%{_libdir}/pkgconfig/uuid.pc
 
-%{_datadir}/et
-%{_datadir}/ss
 %{_includedir}/e2p
+## Rocky includes an additional header ext2_types-x86_64.h
 %{_includedir}/ext2fs
-%{_includedir}/ss
-%{_includedir}/uuid
-%{_mandir}/man1/compile_et.1*
-%{_mandir}/man1/mk_cmds.1*
-%{_mandir}/man3/com_err.3*
-%{_mandir}/man3/uuid.3*
-%{_mandir}/man3/uuid_clear.3*
-%{_mandir}/man3/uuid_compare.3*
-%{_mandir}/man3/uuid_copy.3*
-%{_mandir}/man3/uuid_generate.3*
-%{_mandir}/man3/uuid_generate_random.3*
-%{_mandir}/man3/uuid_generate_time.3*
-%{_mandir}/man3/uuid_is_null.3*
-%{_mandir}/man3/uuid_parse.3*
-%{_mandir}/man3/uuid_time.3*
-%{_mandir}/man3/uuid_unparse.3*
+
 
 ##
 ## Rocky 9.5 has e2fsprog-libs, openSUSE libext2fs
@@ -254,11 +236,24 @@ exit 0
 %attr(6755, uuidd, uuidd) %{_sbindir}/uuidd
 %dir %attr(2775, uuidd, uuidd) /var/lib/libuuid
 
+%{_mandir}/man3/com_err.3*
+%{_mandir}/man3/uuid.3*
+%{_mandir}/man3/uuid_clear.3*
+%{_mandir}/man3/uuid_compare.3*
+%{_mandir}/man3/uuid_copy.3*
+%{_mandir}/man3/uuid_generate.3*
+%{_mandir}/man3/uuid_generate_random.3*
+%{_mandir}/man3/uuid_generate_time.3*
+%{_mandir}/man3/uuid_is_null.3*
+%{_mandir}/man3/uuid_parse.3*
+%{_mandir}/man3/uuid_time.3*
+%{_mandir}/man3/uuid_unparse.3*
 
 
 ##
-## Long list of exlcuded files that aren't distributed with 
+## Long list of excluded files that aren't distributed with 
 ## openSUSE or Rocky, but built/installed and thus rpm complains
+## most of these files will be packaged into other dedicated rpms
 ##
 
 %exclude %{_root_sbindir}/fsck
@@ -295,4 +290,26 @@ exit 0
 %exclude /etc/cron.d/e2scrub_all
 %exclude /usr/lib/udev/rules.d/64-ext4.rules
 %exclude /usr/lib/udev/rules.d/96-e2scrub.rules
+
+%exclude %{_mandir}/man1/compile_et.1*
+%exclude %{_mandir}/man1/mk_cmds.1*
+
+%exclude %{_datadir}/ss
+%exclude %{_includedir}/ss
+
+%exclude %{_datadir}/et
+%exclude %{_libdir}/pkgconfig/ss.pc
+%exclude %{_libdir}/pkgconfig/uuid.pc
+%exclude %{_libdir}/pkgconfig/com_err.pc
+
+%exclude %{_root_libexec}/e2fsprogs/e2scrub_fail
+%exclude %{_includedir}/uuid
+
+%exclude %{_libdir}/libcom_err.a
+%exclude %{_libdir}/libcom_err.so
+%exclude %{_libdir}/libss.a
+%exclude %{_libdir}/libss.so
+%exclude %{_libdir}/libuuid.a
+%exclude %{_libdir}/libuuid.so
+
 
